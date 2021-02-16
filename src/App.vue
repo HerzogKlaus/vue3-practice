@@ -2,7 +2,9 @@
   <div class="container pt-1">
     <div class="card">
       <h2>Актуальные новости {{ now }}</h2>
-      <span>Открыто {{ openRate }}</span>
+      <span
+        >Открыто: <strong>{{ openRate }}</strong> | Прочитано: <strong>{{ readRate }}</strong></span
+      >
     </div>
   </div>
   <app-news
@@ -12,6 +14,8 @@
     :id="item.id"
     :is-open="item.isOpen"
     @open-news="openNews"
+    @read-news="readNews"
+    :wasRead="item.wasRead"
   ></app-news>
 </template>
  
@@ -25,32 +29,40 @@ export default {
     return {
       now: new Date().toLocaleDateString(),
       openRate: 0,
+      readRate: 0,
       news: [
         {
           title: "News 1",
           id: 1,
           isOpen: false,
+          wasRead: false,
         },
 
         {
           title: "News 2",
           id: 2,
           isOpen: false,
+          wasRead: false,
         },
 
         {
           title: "News 3",
           id: 3,
           isOpen: false,
+          wasRead: false,
         },
       ],
     };
   },
 
   methods: {
-    openNews(data) {
+    openNews() {
       this.openRate++;
-      console.log(data);
+    },
+    readNews(id) {
+      let idx = this.news.findIndex(item => item.id === id);
+      this.news[idx].wasRead = true;
+      this.readRate++;
     },
   },
 };
