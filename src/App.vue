@@ -13,9 +13,10 @@
     :title="item.title"
     :id="item.id"
     :is-open="item.isOpen"
+    :wasRead="item.wasRead"
     @open-news="openNews"
     @read-news="readNews"
-    :wasRead="item.wasRead"
+    @read-back="readBack"
   ></app-news>
 </template>
  
@@ -54,7 +55,12 @@ export default {
       ],
     };
   },
-
+  provide() {
+    return {
+      title: "Список всех новостей",
+      news: this.news,
+    };
+  },
   methods: {
     openNews() {
       this.openRate++;
@@ -64,9 +70,18 @@ export default {
       this.news[idx].wasRead = true;
       this.readRate++;
     },
+
+    readBack(id) {
+      const idx = this.news.findIndex(item => item.id === id);
+      this.news[idx].wasRead = false;
+      this.readRate--;
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
+h2 {
+  color: darkred;
+}
 </style>
